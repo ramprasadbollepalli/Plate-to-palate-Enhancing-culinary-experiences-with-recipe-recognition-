@@ -1,0 +1,151 @@
+{% extends 'index.html' %}
+
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
+        <a href="" class="navbar-brand p-0">
+            <h1 class="text-primary m-0"><i class="fa fa-utensils me-3"></i>Recipe Finder</h1>
+            <!-- <img src="/static//static/img/logo.png" alt="Logo"> -->
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="fa fa-bars"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto py-0 pe-4">
+                <a href="{{url_for('admin_home')}}" class="nav-item nav-link">Home</a>
+                <a href="{{url_for('add_recipie')}}" class="nav-item nav-link">Add</a>
+                <a href="{{url_for('view_recipie')}}" class="nav-item nav-link active">View</a>
+            </div>
+            <a href="{{url_for('index')}}" class="btn btn-primary py-2 px-4">LogOut</a>
+        </div>
+    </nav>
+    <div class="container-xxl py-5 bg-dark hero-header mb-5">
+        <div class="container text-center my-5 pt-5 pb-4">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Recipies</h1>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-xxl pt-5 pb-3">
+    <div class="container">
+        <div class="row g-4">
+            {% if datas %}
+                {% for data in datas %}
+                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="team-item text-center rounded overflow-hidden">
+                            <div class="rounded-circle overflow-hidden m-4">
+                                <img style="height: 200px; width: 200px;" class="img-fluid" src="/{{ data[2] }}" alt="Recipe Image">
+                            </div>
+                            <h5 class="mb-0">{{ data[1] }}</h5>
+                            <div class="d-flex justify-content-center mt-3">
+                                <form action="{{ url_for('view_recipie') }}" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="id" value="{{ data[0] }}">
+                                    <button type="submit" class="btn btn-primary mx-1">View</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% if loop.index % 4 == 0 %}
+                        </div><div class="row g-4">
+                    {% endif %}
+                {% endfor %}
+                {% elif data %}
+                <center>
+                    <div class="wow fadeInUp" data-wow-delay="0.2s">
+                        <form action="{{ url_for('update_recipie') }}" method="post" enctype="multipart/form-data">
+                            <div class="row g-3">
+
+                                <div class="col-12">
+                                    <label style="color: green; margin-top: 30px;" for="name">Name</label><br>
+                                    <div class="form-floating">
+                                        <input style="width: 600px;" type="text" class="form-control" id="name" name="r_name" value="{{data[0][1]}}" placeholder="Your Name">
+                                    </div>
+                                </div><br>
+
+                                <div class="col-12">
+                                    <label style="color: green; margin-top: 30px;" for="image">Image</label><br>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <img style="height: 200px; width: 600px;" src="/{{data[0][2]}}" alt="Your browser does not support this image format!">
+                                        </div>
+                                    </div><br>
+
+                                    <div class="form-floating">
+                                        <input style="width: 600px;" type="file" class="form-control" id="image" name="image" value="/{{data[0][2]}}" accept="image/*">
+                                    </div>
+                                </div><br>
+
+                                <div class="col-12">
+                                    <label style="color: green; margin-top: 30px;" for="ingredients">Ingredients</label><br>
+                                    <div class="form-floating">
+                                        <textarea style="height: 100px; width: 600px;" id="ingredients" class="form-control" name="ingredients">{{data[0][3]}}</textarea>
+                                    </div>
+                                </div><br>
+
+                                <div class="col-12">
+                                    <label style="color: green; margin-top: 30px;" for="procedure">Making Procedure</label><br>
+                                    <div class="form-floating">
+                                        <textarea style="height: 100px; width: 600px;" id="procedure" class="form-control" name="procedure">{{data[0][4]}}</textarea>
+                                    </div>
+                                </div><br>
+
+                                <div class="col-12">
+                                    <label style="color: green; margin-top: 30px;" for="video_link">Video Link</label><br>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <a href="{{data[0][5]}}" target="_blank">View the Link</a>
+                                        </div>
+                                    </div><br>
+                                    <div class="form-floating">
+                                        <input style="width: 600px;" type="text" class="form-control" id="video_link" name="video_link" value="{{data[0][5]}}" placeholder="Video Link">
+                                    </div>
+                                </div><br><br><br>
+
+                                <input type="hidden" name="id" value="{{data[0][0]}}">
+                                <input type="hidden" name="alt" value="{{data[0][2]}}">
+
+                                <div class="col-12">
+                                    <button style="width: 600px; margin-top: 30px;" class="btn btn-primary w-100 py-3" type="submit">Update</button>
+                                </div>
+                            </div>
+                        </form><br>
+
+                        <form action="{{ url_for('delete_recipie') }}" method="post" enctype="multipart/form-data">
+                            <div class="col-12">
+                                <input type="hidden" name="id" value="{{data[0][0]}}">
+                                <button style="width: 600px;" class="btn btn-danger w-100 py-3" type="submit">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                                        
+                </center>
+            {% endif %}
+        </div>
+    </div>
+</div><br><br><br><br><br><br><br>
+
+
+
+
+
+{% endblock %}
+
+<!-- {% if datas %} -->
+<!-- <form method="post" enctype="multipart/form-data">
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="team-item text-center rounded overflow-hidden">
+                <div class="rounded-circle overflow-hidden m-4">
+                    <img class="img-fluid" src="{{data[1]}}" alt="">
+                </div>
+                <small>{{data[3]}}</small>
+                <div class="d-flex justify-content-center mt-3">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</form> -->
+<!-- {% endif %} -->

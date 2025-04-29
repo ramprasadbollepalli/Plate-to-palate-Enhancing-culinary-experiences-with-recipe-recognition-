@@ -1,0 +1,72 @@
+{% extends 'index.html' %}
+
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
+        <a href="" class="navbar-brand p-0">
+            <h1 class="text-primary m-0"><i class="fa fa-utensils me-3"></i>Recipe Finder</h1>
+            <!-- <img src="/static/img/logo.png" alt="Logo"> -->
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="fa fa-bars"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto py-0 pe-4">
+                <a href="{{url_for('home')}}" class="nav-item nav-link">Home</a>
+                <a href="{{url_for('upload')}}" class="nav-item nav-link">Upload</a>
+                <a href="{{url_for('search')}}" class="nav-item nav-link active">Search</a>
+            </div>
+            <a href="{{url_for('index')}}" class="btn btn-primary py-2 px-4">LogOut</a>
+        </div>
+    </nav>
+    <div class="container-xxl py-5 bg-dark hero-header mb-5">
+        <div class="container text-center my-5 pt-5 pb-4">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Search</h1>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+    <center>
+        {% if prediction %}
+            {% if prediction == "Unknown" %}
+                <h2>Prediction : Unknown</h2>
+            {% else %}
+                <h2>Predictions</h2>
+                <h4>Name: {{prediction[0][1]}}</h4>
+                <h4>Ingredients: {{prediction[0][3]}}</h4>
+                <h4>Making Procedure: {{prediction[0][4]}}</h4>
+                <h4>Video Link: <a href="{{prediction[0][5]}}" target="_blank">Click here</a></h4>
+                <img style="width: 300px; height: 200px;" src="/{{prediction[0][2]}}" alt="This image is not supported by your browser!">
+            {% endif %}
+        {% endif %}
+
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <div class="wow fadeInUp" data-wow-delay="0.2s">
+                            <form action="{{url_for('search')}}" method="post" enctype="multipart/form-data">
+                                <div class="row g-3">
+    
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="text" name="text" placeholder="Search with Recipie name!" required>
+                                            <label for="text">Name</label>
+                                        </div>
+                                    </div><br>
+    
+                                    <div class="col-12">
+                                        <button class="btn btn-primary w-100 py-3" type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+
+{% endblock %}
